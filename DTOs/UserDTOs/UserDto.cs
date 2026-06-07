@@ -11,5 +11,6 @@ public record UserDto(
     string AadhaarNumber,
     string PANNumber,
     string Address,
+    bool IsEmailVerified,
     string Role
 );

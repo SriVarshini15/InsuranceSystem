@@ -34,6 +34,9 @@ namespace VehicleInsuranceSystem.Models.Proposals
         public int PolicyId { get; set; }
 
         public Policies.Policy Policy { get; set; } = null!;
+
+        public Quote? Quote { get; set; }
+
         public ICollection<ProposalDocument> ProposalDocuments { get; set; }
             = new List<ProposalDocument>();
     }

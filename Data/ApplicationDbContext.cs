@@ -52,6 +52,8 @@ namespace VehicleInsuranceSystem.Data
 
         public DbSet<ProposalDocument> ProposalDocuments { get; set; }
 
+        public DbSet<Quote> Quotes { get; set; }
+
         #endregion
 
         #region Payment Module
@@ -130,6 +132,10 @@ namespace VehicleInsuranceSystem.Data
             builder.Entity<User>()
                 .Property(x => x.Email)
                 .IsRequired();
+
+            builder.Entity<User>()
+                .Property(x => x.EmailVerificationToken)
+                .HasMaxLength(128);
 
             builder.Entity<User>()
                 .Property(x => x.AadhaarNumber)
@@ -236,6 +242,12 @@ namespace VehicleInsuranceSystem.Data
                 .HasOne(x => x.Proposal)
                 .WithMany(x => x.ProposalDocuments)
                 .HasForeignKey(x => x.ProposalId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Proposal>()
+                .HasOne(x => x.Quote)
+                .WithOne(x => x.Proposal)
+                .HasForeignKey<Quote>(x => x.ProposalId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Proposal>()

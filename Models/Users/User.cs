@@ -40,6 +40,15 @@ public class User
 
     public bool IsActive { get; set; } = true;
 
+    public bool IsEmailVerified { get; set; }
+
+    [MaxLength(128)]
+    public string? EmailVerificationToken { get; set; }
+
+    public DateTime? EmailVerificationTokenExpiresAt { get; set; }
+
+    public DateTime? EmailVerifiedAt { get; set; }
+
     public int RoleId { get; set; }
 
     public Role Role { get; set; } = null!;

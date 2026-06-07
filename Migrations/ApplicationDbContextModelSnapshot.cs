@@ -390,6 +390,51 @@ namespace VehicleInsuranceSystem.Migrations
                     b.ToTable("ProposalDocuments");
                 });
 
+            modelBuilder.Entity("VehicleInsuranceSystem.Models.Proposals.Quote", b =>
+                {
+                    b.Property<int>("QuoteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuoteId"));
+
+                    b.Property<decimal>("AddonPremium")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("BasePremium")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("GeneratedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsEmailSent")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProposalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("QuoteNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalPremium")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("QuoteId");
+
+                    b.HasIndex("ProposalId")
+                        .IsUnique();
+
+                    b.ToTable("Quotes");
+                });
+
             modelBuilder.Entity("VehicleInsuranceSystem.Models.UserPolicies.UserPolicy", b =>
                 {
                     b.Property<int>("UserPolicyId")
@@ -527,12 +572,25 @@ namespace VehicleInsuranceSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("EmailVerificationToken")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime?>("EmailVerificationTokenExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EmailVerifiedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEmailVerified")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
@@ -743,6 +801,17 @@ namespace VehicleInsuranceSystem.Migrations
                     b.Navigation("Proposal");
                 });
 
+            modelBuilder.Entity("VehicleInsuranceSystem.Models.Proposals.Quote", b =>
+                {
+                    b.HasOne("VehicleInsuranceSystem.Models.Proposals.Proposal", "Proposal")
+                        .WithOne("Quote")
+                        .HasForeignKey("VehicleInsuranceSystem.Models.Proposals.Quote", "ProposalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Proposal");
+                });
+
             modelBuilder.Entity("VehicleInsuranceSystem.Models.UserPolicies.UserPolicy", b =>
                 {
                     b.HasOne("VehicleInsuranceSystem.Models.Proposals.Proposal", "Proposal")
@@ -807,6 +876,8 @@ namespace VehicleInsuranceSystem.Migrations
             modelBuilder.Entity("VehicleInsuranceSystem.Models.Proposals.Proposal", b =>
                 {
                     b.Navigation("ProposalDocuments");
+
+                    b.Navigation("Quote");
                 });
 
             modelBuilder.Entity("VehicleInsuranceSystem.Models.UserPolicies.UserPolicy", b =>
